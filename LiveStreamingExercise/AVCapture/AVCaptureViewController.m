@@ -9,29 +9,24 @@
 #import "AVCaptureViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "HTWCaptureVideoPreviewView.h"
+#import "HTWSampleBufferDisplayView.h"
+#import "HTWAVCaptureObject.h"
 
 @interface AVCaptureViewController ()<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
-//截取session
-@property (nonatomic,strong) AVCaptureSession *captureSession;
-//視訊裝置
-@property (nonatomic,weak) AVCaptureDevice *videoDevice;
-//聲音裝置
-@property (nonatomic,weak) AVCaptureDevice *audioDevice;
+//HTWAVCaptureObject
+@property (nonatomic,strong) HTWAVCaptureObject *captureObject;
 
-//視訊裝置輸入
-@property (nonatomic,strong) AVCaptureDeviceInput *videoDeviceInput;
-//聲音裝置輸入
-@property (nonatomic,strong) AVCaptureDeviceInput *audioDeviceInput;
+//視訊截取連線
+@property (nonatomic, weak) AVCaptureConnection *videoConnection;
 //視訊品質
 @property (nonatomic) NSString *captureSessionPreset;
-//視訊品質列表
-@property (nonatomic,strong) NSArray<NSString *> *captureSessionPresets;
 //picker資料
 @property (nonatomic,strong) NSArray<NSString *> *pickerData;
 
 @property (weak, nonatomic) IBOutlet UIButton *videoDeviceButton;
 @property (weak, nonatomic) IBOutlet UIButton *audioDeviceButton;
 @property (weak, nonatomic) IBOutlet UIButton *capturePresetButton;
+@property (weak, nonatomic) IBOutlet UISwitch *videoOutputSwith;
 
 
 //視訊畫面
@@ -42,6 +37,7 @@
 @property (weak, nonatomic) IBOutlet UIVisualEffectView *toolsView;
 //工具頁是否隱藏
 @property (nonatomic) BOOL isToolsViewHidden;
+@property (weak, nonatomic) IBOutlet HTWSampleBufferDisplayView *videoBufferView;
 
 @end
 
@@ -51,26 +47,39 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     /////////////
     //step 1 :建立截取的session
-    [self createSession];
+    self.captureObject = [[HTWAVCaptureObject alloc] init];
     //step 2 :建立輸入
     //設定使用的視訊裝置
-    for (AVCaptureDevice *device in [self vedioDevices]) {
+    for (AVCaptureDevice *device in [HTWAVCaptureObject vedioDevices]) {
         //設定裝置會將輸入加至session
         self.videoDevice = device;
         break;
     }
     //設定使用的聲音裝置
-    for (AVCaptureDevice *device in [self audioDevices]) {
+    for (AVCaptureDevice *device in [HTWAVCaptureObject audioDevices]) {
         //設定裝置會將輸入加至session
         self.audioDevice = device;
         break;
     }
     //step 3:開始執行
-    [self.captureSession startRunning];
+    [self.captureObject startRunning];
     /////////////
     [self checkToolsView];
+    [self checkVideoOutputSwith];
+    [self outPutToVideoView];
+}
+
+-(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self.captureObject checkDeviceOrientation];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        
+    }];
 }
 
 #pragma mark - 檢查相關
@@ -87,25 +96,13 @@
     [self.capturePresetButton setTitle:temp forState:UIControlStateNormal];
 }
 
+-(void)checkVideoOutputSwith
+{
+    self.videoOutputSwith.on = (self.captureObject.sampleBufferDelegate != nil);
+    self.videoBufferView.hidden = (self.captureObject.sampleBufferDelegate == nil);
+}
+
 #pragma mark - 取得相關
-
--(NSArray *)vedioDevices
-{
-    if (NSClassFromString(@"AVCaptureDeviceDiscoverySession")) {
-        return [[AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera,AVCaptureDeviceTypeBuiltInTelephotoCamera,AVCaptureDeviceTypeBuiltInDualCamera,AVCaptureDeviceTypeBuiltInDuoCamera] mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionUnspecified] devices];
-    }else{
-        return [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-    }
-}
-
--(NSArray *)audioDevices
-{
-    if (NSClassFromString(@"AVCaptureDeviceDiscoverySession")) {
-        return [[AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInMicrophone] mediaType:AVMediaTypeAudio position:AVCaptureDevicePositionUnspecified] devices];
-    }else{
-        return [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
-    }
-}
 
 -(BOOL)isToolsViewHidden
 {
@@ -114,58 +111,31 @@
 
 -(NSString *)captureSessionPreset
 {
-    return self.captureSession.sessionPreset;
+    return self.captureObject.captureSessionPreset;
+}
+
+-(NSArray<NSString *> *)captureSessionPresets
+{
+    return self.captureObject.captureSessionPresets;
+}
+
+-(AVCaptureConnection *)videoConnection
+{
+    return self.captureObject.videoConnection;
 }
 
 #pragma mark - 設定相關
 
 -(void)setVideoDevice:(AVCaptureDevice *)videoDevice
 {
-    _videoDevice = videoDevice;
+    self.captureObject.videoDevice = videoDevice;
     [self.videoDeviceButton setTitle:videoDevice.localizedName forState:UIControlStateNormal];
-    //改變裝置時將裝置放到輸入
-    self.videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:nil];
 }
 
 -(void)setAudioDevice:(AVCaptureDevice *)audioDevice
 {
-    _audioDevice = audioDevice;
+    self.captureObject.audioDevice = audioDevice;
     [self.audioDeviceButton setTitle:audioDevice.localizedName forState:UIControlStateNormal];
-    //改變裝置時將裝置放到輸入
-    self.audioDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:audioDevice error:nil];
-}
-
--(void)setVideoDeviceInput:(AVCaptureDeviceInput *)videoDeviceInput
-{
-    //若己有輸入則先刪除
-    if (_videoDeviceInput) {
-        [self.captureSession removeInput:_videoDeviceInput];
-    }
-    _videoDeviceInput = videoDeviceInput;
-    //將輸入加進session
-    if ([self.captureSession canAddInput:videoDeviceInput]) {
-        [self.captureSession addInput:videoDeviceInput];
-    }
-}
-
--(void)setCaptureSession:(AVCaptureSession *)captureSession
-{
-    _captureSession = captureSession;
-    self.videoView.session = captureSession;
-    [self checkCaptureSessionPreset];
-}
-
--(void)setAudioDeviceInput:(AVCaptureDeviceInput *)audioDeviceInput
-{
-    //若己有輸入則先刪除
-    if (_audioDeviceInput) {
-        [self.captureSession removeInput:_audioDeviceInput];
-    }
-    _audioDeviceInput = audioDeviceInput;
-    //將輸入加進session
-    if ([self.captureSession canAddInput:audioDeviceInput]) {
-        [self.captureSession addInput:audioDeviceInput];
-    }
 }
 
 -(void)setIsToolsViewHidden:(BOOL)isToolsViewHidden
@@ -175,49 +145,19 @@
 
 -(void)setCaptureSessionPreset:(NSString *)captureSessionPreset
 {
-    if (_captureSession) {
-        self.captureSession.sessionPreset = captureSessionPreset;
-        NSString *temp = [captureSessionPreset stringByReplacingOccurrencesOfString:@"AVCaptureSessionPreset" withString:@""];
-        [self.capturePresetButton setTitle:temp forState:UIControlStateNormal];
-    }
+    self.captureObject.captureSessionPreset = captureSessionPreset;
+    NSString *temp = [captureSessionPreset stringByReplacingOccurrencesOfString:@"AVCaptureSessionPreset" withString:@""];
+    [self.capturePresetButton setTitle:temp forState:UIControlStateNormal];
 }
 
 #pragma mark - 截取影音
 
-//建立截取session
--(void)createSession
+//輸出視訊至AVCaptureVideoPreviewLayer
+-(void)outPutToVideoView
 {
-    self.captureSession = [[AVCaptureSession alloc] init];
-    [self createCaptureSessionPreset];
-}
-
-//建立可用拍攝模式
--(void)createCaptureSessionPreset
-{
-    if (!self.captureSession) {
-        return;
+    if (self.captureObject.captureSession) {
+        self.videoView.session = self.captureObject.captureSession;
     }
-    NSMutableArray *sessions = [NSMutableArray array];
-    NSArray *tempSessions = @[
-                              AVCaptureSessionPresetPhoto,
-                              AVCaptureSessionPresetHigh,
-                              AVCaptureSessionPresetMedium,
-                              AVCaptureSessionPresetLow,
-                              AVCaptureSessionPreset352x288,
-                              AVCaptureSessionPreset640x480,
-                              AVCaptureSessionPreset1280x720,
-                              AVCaptureSessionPreset1920x1080,
-//                              AVCaptureSessionPreset3840x2160,
-                              AVCaptureSessionPresetiFrame960x540,
-                              AVCaptureSessionPresetiFrame1280x720,
-                              AVCaptureSessionPresetInputPriority,
-                              ];
-    for (NSString *session in tempSessions) {
-        if ([self.captureSession canSetSessionPreset:session]) {
-            [sessions addObject:session];
-        }
-    }
-    self.captureSessionPresets = [NSArray arrayWithArray:sessions];
 }
 
 #pragma mark - 功能相關
@@ -229,7 +169,7 @@
 
 - (IBAction)doVideoDeviceButton:(id)sender {
     NSMutableArray *deviceNames = [NSMutableArray array];
-    NSArray *devices = [self vedioDevices];
+    NSArray *devices = [HTWAVCaptureObject vedioDevices];
     for (AVCaptureDevice *device in devices) {
         [deviceNames addObject:device.localizedName];
     }
@@ -241,7 +181,7 @@
 
 - (IBAction)doAudioDeviceButton:(id)sender {
     NSMutableArray *deviceNames = [NSMutableArray array];
-    NSArray *devices = [self audioDevices];
+    NSArray *devices = [HTWAVCaptureObject audioDevices];
     for (AVCaptureDevice *device in devices) {
         [deviceNames addObject:device.localizedName];
     }
@@ -262,6 +202,12 @@
         self.captureSessionPreset = captureSessionPreset;
     }];
 }
+
+- (IBAction)doVideoOutputSwith:(UISwitch *)sender {
+    self.captureObject.sampleBufferDelegate = sender.on?self:nil;
+    [self checkVideoOutputSwith];
+}
+
 
 #pragma mark - PickerView
 
@@ -305,6 +251,17 @@
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     return [self.pickerData objectAtIndex:row];
+}
+
+#pragma mark - AVCaptureVideoDataOutputSampleBufferDelegate
+
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
+{
+    if (self.videoConnection == connection) {
+        [self.videoBufferView enqueueSampleBuffer:sampleBuffer];
+    } else {
+        NSLog(@"采集到音频数据");
+    }
 }
 
 @end

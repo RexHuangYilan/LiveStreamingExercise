@@ -12,5 +12,6 @@
 @interface HTWCaptureVideoPreviewView : UIView
 
 @property (nonatomic, strong) AVCaptureSession *session;
+@property(nonatomic) AVCaptureVideoOrientation videoOrientation;
 
 @end

@@ -47,9 +47,7 @@
             return;
         }
     }
-    if (_videoLayer) {
-        _videoLayer.connection.videoOrientation = [self videoOrientationFromCurrentWithDeviceOrientation:orientation];
-    }
+    self.videoOrientation = [self videoOrientationFromCurrentWithDeviceOrientation:orientation];
 }
 
 -(void)dealloc
@@ -83,6 +81,13 @@
     }
 }
 
+-(void)setVideoOrientation:(AVCaptureVideoOrientation)videoOrientation
+{
+    if (_videoLayer) {
+        _videoLayer.connection.videoOrientation = videoOrientation;
+    }
+}
+
 #pragma mark - 取得相關
 
 -(AVCaptureVideoPreviewLayer *)videoLayer
@@ -93,6 +98,8 @@
         }else{
             self.videoLayer = [[AVCaptureVideoPreviewLayer alloc] init];
         }
+        //呈現影片為填滿
+        self.videoLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     }
     return _videoLayer;
 }
