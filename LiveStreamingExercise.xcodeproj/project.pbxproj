@@ -13,6 +13,11 @@
 		CDFCF6F71E540DB500CABD0F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDFCF6F51E540DB500CABD0F /* Main.storyboard */; };
 		CDFCF6F91E540DB500CABD0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDFCF6F81E540DB500CABD0F /* Assets.xcassets */; };
 		CDFCF6FC1E540DB500CABD0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDFCF6FA1E540DB500CABD0F /* LaunchScreen.storyboard */; };
+		CDFCF7051E5429FC00CABD0F /* mainTableList.plist in Resources */ = {isa = PBXBuildFile; fileRef = CDFCF7041E5429FC00CABD0F /* mainTableList.plist */; };
+		CDFCF7091E542DD600CABD0F /* AVCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF7081E542DD600CABD0F /* AVCaptureViewController.m */; };
+		CDFCF70D1E55434100CABD0F /* HTWCaptureVideoPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF70C1E55434100CABD0F /* HTWCaptureVideoPreviewView.m */; };
+		CDFCF7101E56C2A000CABD0F /* HTWSampleBufferDisplayView.m in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF70F1E56C2A000CABD0F /* HTWSampleBufferDisplayView.m */; };
+		CDFCF7131E58334600CABD0F /* HTWAVCaptureObject.m in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF7121E58334600CABD0F /* HTWAVCaptureObject.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +31,15 @@
 		CDFCF6F81E540DB500CABD0F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CDFCF6FB1E540DB500CABD0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CDFCF6FD1E540DB500CABD0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CDFCF7041E5429FC00CABD0F /* mainTableList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = mainTableList.plist; sourceTree = "<group>"; };
+		CDFCF7071E542DD600CABD0F /* AVCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCaptureViewController.h; sourceTree = "<group>"; };
+		CDFCF7081E542DD600CABD0F /* AVCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCaptureViewController.m; sourceTree = "<group>"; };
+		CDFCF70B1E55434100CABD0F /* HTWCaptureVideoPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTWCaptureVideoPreviewView.h; sourceTree = "<group>"; };
+		CDFCF70C1E55434100CABD0F /* HTWCaptureVideoPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTWCaptureVideoPreviewView.m; sourceTree = "<group>"; };
+		CDFCF70E1E56C2A000CABD0F /* HTWSampleBufferDisplayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTWSampleBufferDisplayView.h; sourceTree = "<group>"; };
+		CDFCF70F1E56C2A000CABD0F /* HTWSampleBufferDisplayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTWSampleBufferDisplayView.m; sourceTree = "<group>"; };
+		CDFCF7111E58334600CABD0F /* HTWAVCaptureObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTWAVCaptureObject.h; sourceTree = "<group>"; };
+		CDFCF7121E58334600CABD0F /* HTWAVCaptureObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTWAVCaptureObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,15 +72,13 @@
 		CDFCF6EB1E540DB500CABD0F /* LiveStreamingExercise */ = {
 			isa = PBXGroup;
 			children = (
-				CDFCF6EF1E540DB500CABD0F /* AppDelegate.h */,
-				CDFCF6F01E540DB500CABD0F /* AppDelegate.m */,
+				CDFCF70A1E5542EF00CABD0F /* View */,
+				CDFCF7061E542D7100CABD0F /* 原生取得影音 */,
 				CDFCF6F21E540DB500CABD0F /* ViewController.h */,
 				CDFCF6F31E540DB500CABD0F /* ViewController.m */,
 				CDFCF6F51E540DB500CABD0F /* Main.storyboard */,
-				CDFCF6F81E540DB500CABD0F /* Assets.xcassets */,
-				CDFCF6FA1E540DB500CABD0F /* LaunchScreen.storyboard */,
-				CDFCF6FD1E540DB500CABD0F /* Info.plist */,
 				CDFCF6EC1E540DB500CABD0F /* Supporting Files */,
+				CDFCF7041E5429FC00CABD0F /* mainTableList.plist */,
 			);
 			path = LiveStreamingExercise;
 			sourceTree = "<group>";
@@ -74,9 +86,37 @@
 		CDFCF6EC1E540DB500CABD0F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CDFCF6EF1E540DB500CABD0F /* AppDelegate.h */,
+				CDFCF6F01E540DB500CABD0F /* AppDelegate.m */,
+				CDFCF6F81E540DB500CABD0F /* Assets.xcassets */,
+				CDFCF6FA1E540DB500CABD0F /* LaunchScreen.storyboard */,
+				CDFCF6FD1E540DB500CABD0F /* Info.plist */,
 				CDFCF6ED1E540DB500CABD0F /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CDFCF7061E542D7100CABD0F /* 原生取得影音 */ = {
+			isa = PBXGroup;
+			children = (
+				CDFCF7071E542DD600CABD0F /* AVCaptureViewController.h */,
+				CDFCF7081E542DD600CABD0F /* AVCaptureViewController.m */,
+				CDFCF7111E58334600CABD0F /* HTWAVCaptureObject.h */,
+				CDFCF7121E58334600CABD0F /* HTWAVCaptureObject.m */,
+			);
+			name = "原生取得影音";
+			path = AVCapture;
+			sourceTree = "<group>";
+		};
+		CDFCF70A1E5542EF00CABD0F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CDFCF70B1E55434100CABD0F /* HTWCaptureVideoPreviewView.h */,
+				CDFCF70C1E55434100CABD0F /* HTWCaptureVideoPreviewView.m */,
+				CDFCF70E1E56C2A000CABD0F /* HTWSampleBufferDisplayView.h */,
+				CDFCF70F1E56C2A000CABD0F /* HTWSampleBufferDisplayView.m */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,6 +180,7 @@
 			files = (
 				CDFCF6FC1E540DB500CABD0F /* LaunchScreen.storyboard in Resources */,
 				CDFCF6F91E540DB500CABD0F /* Assets.xcassets in Resources */,
+				CDFCF7051E5429FC00CABD0F /* mainTableList.plist in Resources */,
 				CDFCF6F71E540DB500CABD0F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -151,9 +192,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDFCF70D1E55434100CABD0F /* HTWCaptureVideoPreviewView.m in Sources */,
 				CDFCF6F41E540DB500CABD0F /* ViewController.m in Sources */,
+				CDFCF7131E58334600CABD0F /* HTWAVCaptureObject.m in Sources */,
 				CDFCF6F11E540DB500CABD0F /* AppDelegate.m in Sources */,
+				CDFCF7091E542DD600CABD0F /* AVCaptureViewController.m in Sources */,
 				CDFCF6EE1E540DB500CABD0F /* main.m in Sources */,
+				CDFCF7101E56C2A000CABD0F /* HTWSampleBufferDisplayView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,8 +320,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = WRQ69G3N44;
 				INFOPLIST_FILE = LiveStreamingExercise/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.rexhuang.LiveStreamingExercise;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tianwei.LiveStreamingExercise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -287,8 +333,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = WRQ69G3N44;
 				INFOPLIST_FILE = LiveStreamingExercise/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.rexhuang.LiveStreamingExercise;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tianwei.LiveStreamingExercise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -312,6 +359,7 @@
 				CDFCF7021E540DB500CABD0F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
