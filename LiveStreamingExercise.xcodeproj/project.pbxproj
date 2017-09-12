@@ -18,6 +18,8 @@
 		CDFCF70D1E55434100CABD0F /* HTWCaptureVideoPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF70C1E55434100CABD0F /* HTWCaptureVideoPreviewView.m */; };
 		CDFCF7101E56C2A000CABD0F /* HTWSampleBufferDisplayView.m in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF70F1E56C2A000CABD0F /* HTWSampleBufferDisplayView.m */; };
 		CDFCF7131E58334600CABD0F /* HTWAVCaptureObject.m in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF7121E58334600CABD0F /* HTWAVCaptureObject.m */; };
+		CDFCF71A1E5AA28A00CABD0F /* H264Encode.m in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF7191E5AA28A00CABD0F /* H264Encode.m */; };
+		CDFCF7261E5ABD9C00CABD0F /* HTWFile.m in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF7251E5ABD9C00CABD0F /* HTWFile.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,10 @@
 		CDFCF70F1E56C2A000CABD0F /* HTWSampleBufferDisplayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTWSampleBufferDisplayView.m; sourceTree = "<group>"; };
 		CDFCF7111E58334600CABD0F /* HTWAVCaptureObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTWAVCaptureObject.h; sourceTree = "<group>"; };
 		CDFCF7121E58334600CABD0F /* HTWAVCaptureObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTWAVCaptureObject.m; sourceTree = "<group>"; };
+		CDFCF7181E5AA28A00CABD0F /* H264Encode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = H264Encode.h; sourceTree = "<group>"; };
+		CDFCF7191E5AA28A00CABD0F /* H264Encode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = H264Encode.m; sourceTree = "<group>"; };
+		CDFCF7241E5ABD9C00CABD0F /* HTWFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTWFile.h; sourceTree = "<group>"; };
+		CDFCF7251E5ABD9C00CABD0F /* HTWFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTWFile.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +78,9 @@
 		CDFCF6EB1E540DB500CABD0F /* LiveStreamingExercise */ = {
 			isa = PBXGroup;
 			children = (
+				CDFCF7231E5ABD7800CABD0F /* Tools */,
+				CDFCF71B1E5ABB2800CABD0F /* Category */,
+				CDFCF7141E5A9F3D00CABD0F /* code */,
 				CDFCF70A1E5542EF00CABD0F /* View */,
 				CDFCF7061E542D7100CABD0F /* 原生取得影音 */,
 				CDFCF6F21E540DB500CABD0F /* ViewController.h */,
@@ -117,6 +126,63 @@
 				CDFCF70F1E56C2A000CABD0F /* HTWSampleBufferDisplayView.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		CDFCF7141E5A9F3D00CABD0F /* code */ = {
+			isa = PBXGroup;
+			children = (
+				CDFCF7151E5AA1A100CABD0F /* video */,
+			);
+			path = code;
+			sourceTree = "<group>";
+		};
+		CDFCF7151E5AA1A100CABD0F /* video */ = {
+			isa = PBXGroup;
+			children = (
+				CDFCF7161E5AA1CF00CABD0F /* h264 */,
+			);
+			path = video;
+			sourceTree = "<group>";
+		};
+		CDFCF7161E5AA1CF00CABD0F /* h264 */ = {
+			isa = PBXGroup;
+			children = (
+				CDFCF7171E5AA23500CABD0F /* encode */,
+			);
+			path = h264;
+			sourceTree = "<group>";
+		};
+		CDFCF7171E5AA23500CABD0F /* encode */ = {
+			isa = PBXGroup;
+			children = (
+				CDFCF7181E5AA28A00CABD0F /* H264Encode.h */,
+				CDFCF7191E5AA28A00CABD0F /* H264Encode.m */,
+			);
+			path = encode;
+			sourceTree = "<group>";
+		};
+		CDFCF71B1E5ABB2800CABD0F /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				CDFCF71C1E5ABB4700CABD0F /* NSString */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		CDFCF71C1E5ABB4700CABD0F /* NSString */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NSString;
+			sourceTree = "<group>";
+		};
+		CDFCF7231E5ABD7800CABD0F /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				CDFCF7241E5ABD9C00CABD0F /* HTWFile.h */,
+				CDFCF7251E5ABD9C00CABD0F /* HTWFile.m */,
+			);
+			path = Tools;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,10 +259,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				CDFCF70D1E55434100CABD0F /* HTWCaptureVideoPreviewView.m in Sources */,
+				CDFCF71A1E5AA28A00CABD0F /* H264Encode.m in Sources */,
 				CDFCF6F41E540DB500CABD0F /* ViewController.m in Sources */,
 				CDFCF7131E58334600CABD0F /* HTWAVCaptureObject.m in Sources */,
 				CDFCF6F11E540DB500CABD0F /* AppDelegate.m in Sources */,
 				CDFCF7091E542DD600CABD0F /* AVCaptureViewController.m in Sources */,
+				CDFCF7261E5ABD9C00CABD0F /* HTWFile.m in Sources */,
 				CDFCF6EE1E540DB500CABD0F /* main.m in Sources */,
 				CDFCF7101E56C2A000CABD0F /* HTWSampleBufferDisplayView.m in Sources */,
 			);
