@@ -109,6 +109,21 @@
     }
 }
 
+-(NSString *)captureSessionPreset
+{
+    return self.captureSession.sessionPreset;
+}
+
+-(CGSize)outputSize
+{
+    NSDictionary* outputSettings = [self.videoOutput videoSettings];
+    
+    long width  = [[outputSettings objectForKey:@"Width"]  longValue];
+    long height = [[outputSettings objectForKey:@"Height"] longValue];
+    CGSize size = CGSizeMake(width, height);
+    return size;
+}
+
 #pragma mark - 設定相關
 
 -(void)setVideoDevice:(AVCaptureDevice *)videoDevice
@@ -157,7 +172,10 @@
         */
         NSString* key = (NSString*)kCVPixelBufferPixelFormatTypeKey;
         NSNumber* val = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_420YpCbCr8BiPlanarFullRange];
-        NSDictionary* videoSettings = [NSDictionary dictionaryWithObject:val forKey:key];
+        NSDictionary* videoSettings = @{key:val,
+                                        (NSString*)kCVPixelBufferWidthKey:@(768),
+                                        (NSString*)kCVPixelBufferHeightKey:@(1024)
+                                        };
         videoOutput.videoSettings = videoSettings;
         dispatch_queue_t videoQueue = dispatch_queue_create("Video Capture Queue", DISPATCH_QUEUE_SERIAL);
         [videoOutput setSampleBufferDelegate:self.sampleBufferDelegate queue:videoQueue];

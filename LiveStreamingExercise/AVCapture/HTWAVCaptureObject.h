@@ -25,6 +25,7 @@
 @property (readonly) NSArray<NSString *> *captureSessionPresets;
 //視訊截取連線
 @property (readonly) AVCaptureConnection *videoConnection;
+@property (readonly) CGSize outputSize;
 
 //所有視訊裝置
 +(NSArray *)vedioDevices;

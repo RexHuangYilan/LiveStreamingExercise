@@ -11,10 +11,16 @@
 #import "HTWCaptureVideoPreviewView.h"
 #import "HTWSampleBufferDisplayView.h"
 #import "HTWAVCaptureObject.h"
+//h264加密
+#import "H264Encode.h"
+//檔案
+#import "HTWFile.h"
 
-@interface AVCaptureViewController ()<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
+@interface AVCaptureViewController ()<AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate,UIPickerViewDataSource,UIPickerViewDelegate,H264HwEncoderDelegate>
 //HTWAVCaptureObject
 @property (nonatomic,strong) HTWAVCaptureObject *captureObject;
+//加密264
+@property (nonatomic,strong) H264Encode *h264Encode;
 
 //視訊截取連線
 @property (nonatomic, weak) AVCaptureConnection *videoConnection;
@@ -23,11 +29,12 @@
 //picker資料
 @property (nonatomic,strong) NSArray<NSString *> *pickerData;
 
+//功能鈕
 @property (weak, nonatomic) IBOutlet UIButton *videoDeviceButton;
 @property (weak, nonatomic) IBOutlet UIButton *audioDeviceButton;
 @property (weak, nonatomic) IBOutlet UIButton *capturePresetButton;
 @property (weak, nonatomic) IBOutlet UISwitch *videoOutputSwith;
-
+@property (weak, nonatomic) IBOutlet UISwitch *fileOutputSwith;
 
 //視訊畫面
 @property (weak, nonatomic) IBOutlet HTWCaptureVideoPreviewView *videoView;
@@ -38,6 +45,11 @@
 //工具頁是否隱藏
 @property (nonatomic) BOOL isToolsViewHidden;
 @property (weak, nonatomic) IBOutlet HTWSampleBufferDisplayView *videoBufferView;
+
+
+//檔案
+@property (nonatomic,strong) NSString *filePath;
+@property (nonatomic,strong) NSFileHandle *fileHandle;
 
 @end
 
@@ -67,9 +79,12 @@
     //step 3:開始執行
     [self.captureObject startRunning];
     /////////////
+    [self checkCaptureSessionPreset];
     [self checkToolsView];
     [self checkVideoOutputSwith];
+    [self checkFileOutputSwith];
     [self outPutToVideoView];
+
 }
 
 -(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -80,6 +95,11 @@
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         
     }];
+}
+
+-(void)dealloc
+{
+    [self.h264Encode end];
 }
 
 #pragma mark - 檢查相關
@@ -100,6 +120,11 @@
 {
     self.videoOutputSwith.on = (self.captureObject.sampleBufferDelegate != nil);
     self.videoBufferView.hidden = (self.captureObject.sampleBufferDelegate == nil);
+}
+
+-(void)checkFileOutputSwith
+{
+    self.fileOutputSwith.on = (self.fileHandle != nil);
 }
 
 #pragma mark - 取得相關
@@ -146,8 +171,7 @@
 -(void)setCaptureSessionPreset:(NSString *)captureSessionPreset
 {
     self.captureObject.captureSessionPreset = captureSessionPreset;
-    NSString *temp = [captureSessionPreset stringByReplacingOccurrencesOfString:@"AVCaptureSessionPreset" withString:@""];
-    [self.capturePresetButton setTitle:temp forState:UIControlStateNormal];
+    [self checkCaptureSessionPreset];
 }
 
 #pragma mark - 截取影音
@@ -158,6 +182,11 @@
     if (self.captureObject.captureSession) {
         self.videoView.session = self.captureObject.captureSession;
     }
+}
+
+-(void)createFile
+{
+    self.filePath = [HTWFile createFileName:@"test.h264"];
 }
 
 #pragma mark - 功能相關
@@ -206,8 +235,38 @@
 - (IBAction)doVideoOutputSwith:(UISwitch *)sender {
     self.captureObject.sampleBufferDelegate = sender.on?self:nil;
     [self checkVideoOutputSwith];
+//    self.videoBufferView.hidden = (self.captureObject.sampleBufferDelegate == nil);
+    [self doFileOutputSwith:self.fileOutputSwith];
 }
 
+- (IBAction)doFileOutputSwith:(UISwitch *)sender {
+
+    if (sender.on && self.videoOutputSwith.on) {
+        [self createFile];
+        self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
+        if (!self.h264Encode) {
+            
+            self.h264Encode = [[H264Encode alloc] init];
+//            [self.h264Encode initEncode:1080 height:1920];
+            [self.h264Encode initEncode:self.captureObject.outputSize.width height:self.captureObject.outputSize.height];
+            self.h264Encode.delegate = self;
+        }
+    }else{
+        
+        if (self.h264Encode) {
+            [self.h264Encode end];
+            self.h264Encode.delegate = nil;
+            
+            self.h264Encode = nil;
+        }
+        if (self.fileHandle) {
+            [self.fileHandle closeFile];
+            self.fileHandle = nil;
+        }
+    }
+    
+    [self checkFileOutputSwith];
+}
 
 #pragma mark - PickerView
 
@@ -257,10 +316,68 @@
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
+    if (!self.captureObject.captureSession.isRunning) {
+        return;
+    }
     if (self.videoConnection == connection) {
         [self.videoBufferView enqueueSampleBuffer:sampleBuffer];
+        [self.h264Encode encode:sampleBuffer];
     } else {
         NSLog(@"采集到音频数据");
+    }
+}
+
+#pragma mark - H264HwEncoderImplDelegate delegate 解码代理
+- (void)gotSpsPps:(NSData*)sps pps:(NSData*)pps
+{
+    NSLog(@"gotSpsPps %d %d", (int)[sps length], (int)[pps length]);
+    //[sps writeToFile:h264FileSavePath atomically:YES];
+    //[pps writeToFile:h264FileSavePath atomically:YES];
+    // write(fd, [sps bytes], [sps length]);
+    //write(fd, [pps bytes], [pps length]);
+    const char bytes[] = "\x00\x00\x00\x01";
+    size_t length = (sizeof bytes) - 1; //string literals have implicit trailing '\0'
+    NSData *ByteHeader = [NSData dataWithBytes:bytes length:length];
+    [self.fileHandle writeData:ByteHeader];
+    [self.fileHandle writeData:sps];
+    [self.fileHandle writeData:ByteHeader];
+    [self.fileHandle writeData:pps];
+    
+}
+- (void)gotEncodedData:(NSData*)data isKeyFrame:(BOOL)isKeyFrame
+{
+    NSLog(@"gotEncodedData %d", (int)[data length]);
+    //    static int framecount = 1;
+    
+    // [data writeToFile:h264FileSavePath atomically:YES];
+    //write(fd, [data bytes], [data length]);
+    if (self.fileHandle != NULL)
+    {
+        const char bytes[] = "\x00\x00\x00\x01";
+        size_t length = (sizeof bytes) - 1; //string literals have implicit trailing '\0'
+        NSData *ByteHeader = [NSData dataWithBytes:bytes length:length];
+        
+        
+        /*NSData *UnitHeader;
+         if(isKeyFrame)
+         {
+         char header[2];
+         header[0] = '\x65';
+         UnitHeader = [NSData dataWithBytes:header length:1];
+         framecount = 1;
+         }
+         else
+         {
+         char header[4];
+         header[0] = '\x41';
+         //header[1] = '\x9A';
+         //header[2] = framecount;
+         UnitHeader = [NSData dataWithBytes:header length:1];
+         framecount++;
+         }*/
+        [self.fileHandle writeData:ByteHeader];
+        //[fileHandle writeData:UnitHeader];
+        [self.fileHandle writeData:data];
     }
 }
 

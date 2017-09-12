@@ -5,7 +5,6 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -126,15 +125,8 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="myv-9k-UT7" customClass="HTWSampleBufferDisplayView">
-                                <rect key="frame" x="247" y="499" width="120" height="160"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="QCe-d4-IHx">
-                                        <variation key="heightClass=compact-widthClass=compact" constant="120"/>
-                                        <variation key="heightClass=regular-widthClass=compact" constant="120"/>
-                                    </constraint>
-                                    <constraint firstAttribute="width" secondItem="myv-9k-UT7" secondAttribute="height" multiplier="3:4" id="lgr-oG-wlj"/>
-                                </constraints>
                             </view>
                             <visualEffectView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T3A-vi-1gj">
                                 <rect key="frame" x="16" y="72" width="343" height="575"/>
@@ -202,6 +194,18 @@
                                                 <action selector="doVideoOutputSwith:" destination="TbK-Pr-GVO" eventType="valueChanged" id="CbK-4Q-S3x"/>
                                             </connections>
                                         </switch>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="輸出檔案:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eAI-36-nck">
+                                            <rect key="frame" x="8" y="149" width="74" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uS7-0r-N2H">
+                                            <rect key="frame" x="90" y="144" width="51" height="31"/>
+                                            <connections>
+                                                <action selector="doFileOutputSwith:" destination="TbK-Pr-GVO" eventType="valueChanged" id="fS9-an-WpQ"/>
+                                            </connections>
+                                        </switch>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="wCp-5E-bif" firstAttribute="centerY" secondItem="cCe-6K-MwE" secondAttribute="centerY" id="0of-TO-Ixz"/>
@@ -210,13 +214,17 @@
                                         <constraint firstItem="GJS-t7-VRI" firstAttribute="centerY" secondItem="XbO-jl-g2m" secondAttribute="centerY" id="FgD-iZ-ppj"/>
                                         <constraint firstItem="aNy-K8-1WM" firstAttribute="leading" secondItem="Pvh-iS-4GD" secondAttribute="trailing" constant="8" id="JAq-7q-NZr"/>
                                         <constraint firstItem="XbO-jl-g2m" firstAttribute="top" secondItem="DBS-ni-Vp2" secondAttribute="bottom" constant="13" id="Jav-qb-U3c"/>
+                                        <constraint firstItem="eAI-36-nck" firstAttribute="leading" secondItem="XbO-jl-g2m" secondAttribute="leading" id="Sar-7w-19B"/>
                                         <constraint firstItem="XbO-jl-g2m" firstAttribute="leading" secondItem="DBS-ni-Vp2" secondAttribute="leading" id="Sh0-yg-GWN"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="aNy-K8-1WM" secondAttribute="trailing" constant="8" id="WcV-9i-EkC"/>
+                                        <constraint firstItem="uS7-0r-N2H" firstAttribute="centerY" secondItem="eAI-36-nck" secondAttribute="centerY" id="a4g-QY-GHf"/>
                                         <constraint firstItem="cCe-6K-MwE" firstAttribute="leading" secondItem="Pvh-iS-4GD" secondAttribute="leading" id="cYk-YX-3Aw"/>
                                         <constraint firstItem="OBw-92-atY" firstAttribute="leading" secondItem="DBS-ni-Vp2" secondAttribute="trailing" constant="8" id="eNG-ae-EUe"/>
                                         <constraint firstItem="GJS-t7-VRI" firstAttribute="leading" secondItem="XbO-jl-g2m" secondAttribute="trailing" constant="8" id="hPX-gy-eNb"/>
+                                        <constraint firstItem="eAI-36-nck" firstAttribute="top" secondItem="XbO-jl-g2m" secondAttribute="bottom" constant="18" id="hmg-7S-CPn"/>
                                         <constraint firstItem="OBw-92-atY" firstAttribute="centerY" secondItem="DBS-ni-Vp2" secondAttribute="centerY" id="icu-39-WyJ"/>
                                         <constraint firstItem="wCp-5E-bif" firstAttribute="leading" secondItem="cCe-6K-MwE" secondAttribute="trailing" constant="8" id="izG-f0-Td5"/>
+                                        <constraint firstItem="uS7-0r-N2H" firstAttribute="leading" secondItem="eAI-36-nck" secondAttribute="trailing" constant="8" id="wyd-Rs-mgi"/>
                                         <constraint firstItem="Pvh-iS-4GD" firstAttribute="leading" secondItem="M0c-yr-rfl" secondAttribute="leading" constant="8" id="xHh-Qm-ZZE"/>
                                         <constraint firstItem="DBS-ni-Vp2" firstAttribute="top" secondItem="cCe-6K-MwE" secondAttribute="bottom" constant="13" id="y3L-4P-T4K"/>
                                         <constraint firstItem="aNy-K8-1WM" firstAttribute="centerY" secondItem="Pvh-iS-4GD" secondAttribute="centerY" id="yFK-XW-lGH"/>
@@ -228,16 +236,18 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="iPD-IT-Lno" firstAttribute="top" secondItem="myv-9k-UT7" secondAttribute="bottom" constant="8" id="3Cs-Xo-Sb8"/>
                             <constraint firstItem="mV3-Gw-uqa" firstAttribute="leading" secondItem="hBs-9a-2Yu" secondAttribute="leading" id="4hx-tV-1xg"/>
                             <constraint firstAttribute="trailing" secondItem="T3A-vi-1gj" secondAttribute="trailing" constant="16" id="BpR-sZ-ok9"/>
                             <constraint firstItem="iPD-IT-Lno" firstAttribute="top" secondItem="T3A-vi-1gj" secondAttribute="bottom" constant="20" id="Brm-LH-H56"/>
+                            <constraint firstItem="myv-9k-UT7" firstAttribute="top" secondItem="mV3-Gw-uqa" secondAttribute="top" id="Das-Lf-eL8"/>
+                            <constraint firstItem="myv-9k-UT7" firstAttribute="leading" secondItem="mV3-Gw-uqa" secondAttribute="leading" id="Dbe-4u-D27"/>
                             <constraint firstItem="T3A-vi-1gj" firstAttribute="leading" secondItem="hBs-9a-2Yu" secondAttribute="leading" constant="16" id="FJW-hz-DlY"/>
                             <constraint firstItem="mV3-Gw-uqa" firstAttribute="top" secondItem="hBs-9a-2Yu" secondAttribute="top" id="K5G-Zt-Ph6"/>
-                            <constraint firstAttribute="trailing" secondItem="myv-9k-UT7" secondAttribute="trailing" constant="8" id="Nsg-24-JYe"/>
                             <constraint firstItem="iPD-IT-Lno" firstAttribute="top" secondItem="mV3-Gw-uqa" secondAttribute="bottom" id="cSQ-xa-DsI"/>
                             <constraint firstItem="T3A-vi-1gj" firstAttribute="top" secondItem="1kR-bF-MLx" secondAttribute="bottom" constant="8" id="n3p-Wy-TaL"/>
+                            <constraint firstItem="myv-9k-UT7" firstAttribute="trailing" secondItem="mV3-Gw-uqa" secondAttribute="trailing" id="rpl-so-BJ8"/>
                             <constraint firstAttribute="trailing" secondItem="mV3-Gw-uqa" secondAttribute="trailing" id="u96-2z-w2F"/>
+                            <constraint firstItem="myv-9k-UT7" firstAttribute="bottom" secondItem="mV3-Gw-uqa" secondAttribute="bottom" id="v6t-1p-QZa"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="AtH-rH-WKh">
@@ -251,6 +261,7 @@
                     <connections>
                         <outlet property="audioDeviceButton" destination="wCp-5E-bif" id="JHd-3I-AjM"/>
                         <outlet property="capturePresetButton" destination="OBw-92-atY" id="tca-y8-lhF"/>
+                        <outlet property="fileOutputSwith" destination="uS7-0r-N2H" id="60l-uN-sbA"/>
                         <outlet property="rightButton" destination="7sH-H3-7hh" id="F8K-ac-GFx"/>
                         <outlet property="toolsView" destination="T3A-vi-1gj" id="nhN-D1-KR9"/>
                         <outlet property="videoBufferView" destination="myv-9k-UT7" id="ud4-fp-nJf"/>
